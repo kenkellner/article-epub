@@ -15,11 +15,6 @@ class Publisher(object):
     def __init__(self, url, doi=None, out_format='epub'):
         self.url = url
         self.doi = doi
-        self.output_format = out_format
-        if out_format not in ['epub','kepub']:
-            sys.exit('Supported formats are epub and kepub')
-        if doi != None:
-            self.doi = doi
 
     def soupify(self):
         """Get HTML from article's page"""
@@ -111,11 +106,4 @@ def register_publisher(publisher):
 
 def get_publishers():
     return _publisher_domains
-
-
-
-
-
-
-
 
