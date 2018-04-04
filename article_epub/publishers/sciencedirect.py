@@ -45,7 +45,7 @@ class ScienceDirect(SciArticle):
 
     def get_body(self):
         body_raw = str(self.soup.find('div',class_='Body'))
-        self.body = body_raw.replace('#bib','#ref-id-bib')
+        self.body = body_raw.replace('#b','#ref-id-b')
 
     def get_references(self):
         self.references = self.soup.find('section',class_='bibliography')

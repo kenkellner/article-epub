@@ -5,6 +5,7 @@ import os
 import sys
 import pypandoc
 from time import sleep
+import subprocess
 
 class SciArticle(object):
     
@@ -31,7 +32,10 @@ class SciArticle(object):
         except:
             sys.exit('Failed to load URL')
         
-        sleep(2) #To allow redirects
+        if self.doi != None:
+            print('Waiting for redirects..')
+            sleep(5) #To allow redirects
+
         self.url = driver.current_url
         
         self.soup = BeautifulSoup(driver.page_source,'html.parser')
@@ -82,16 +86,20 @@ class SciArticle(object):
         args.append('--parse-raw')
 
         self.output = self.author_surnames[0]+self.year+'.epub'
+        output_raw = '/tmp/raw.epub'
 
         combined = ''
         combined += str(self.citation)
         combined += str(self.abstract)
         combined += str(self.body)
         combined += str(self.references)
-
+        
+        print('Generating epub...')
         epubout = pypandoc.convert_text(combined,format='html',to='epub',
                 extra_args=args,
-                outputfile=self.output)
+                outputfile=output_raw)
+
+        subprocess.check_output(['ebook-convert',output_raw,self.output])
 
 
 
