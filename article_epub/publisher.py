@@ -7,7 +7,10 @@ import pypandoc
 from time import sleep
 import subprocess
 
-class SciArticle(object):
+_publishers = list()
+_publisher_domains = dict()
+
+class Publisher(object):
     
     def __init__(self, url, doi=None, out_format='epub'):
         self.url = url
@@ -85,7 +88,7 @@ class SciArticle(object):
         args.append('author="'+all_authors+'"')
         args.append('--parse-raw')
 
-        self.output = self.author_surnames[0]+self.year+'.epub'
+        self.output = self.author_surnames[0]+'_'+self.year+'.epub'
         output_raw = '/tmp/raw.epub'
 
         combined = ''
@@ -100,6 +103,16 @@ class SciArticle(object):
                 outputfile=output_raw)
 
         subprocess.check_output(['ebook-convert',output_raw,self.output])
+
+def register_publisher(publisher):
+    _publishers.append(publisher)
+    for d in publisher.domains:
+        _publisher_domains[d] = publisher
+
+def get_publishers():
+    return _publisher_domains
+
+
 
 
 
