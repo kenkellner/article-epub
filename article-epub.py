@@ -11,7 +11,8 @@ def main():
         url = sys.argv[1]
         doi = None
     
-    domain = url.split("//")[-1].split("/")[0].split('?')[0]
+    domain = ".".join(url.split("//")[-1].split("/")[0] \
+            .split('?')[0].split('.')[-2:])
 
     art = article_epub.publisher.get_publishers()[domain](url=url,doi=doi)
 

@@ -6,6 +6,8 @@ import sys
 import pypandoc
 from time import sleep
 import subprocess
+import requests
+import json
 
 _publishers = list()
 _publisher_domains = dict()
@@ -16,8 +18,12 @@ class Publisher(object):
         self.url = url
         self.doi = doi
 
+    def get_final_url(self):
+        pass
+
     def soupify(self):
         """Get HTML from article's page"""
+        self.get_final_url()
         os.environ['MOZ_HEADLESS'] = '1'
         binary = FirefoxBinary('/usr/bin/firefox')
         try:
@@ -33,11 +39,43 @@ class Publisher(object):
         if self.doi != None:
             print('Waiting for redirects..')
             sleep(5) #To allow redirects
-
+        
+        sleep(5)
         self.url = driver.current_url
         
         self.soup = BeautifulSoup(driver.page_source,'html.parser')
         driver.quit()
+
+    def doi2json(self):
+        """
+        Get a dictionary of metadata for a given DOI.
+        """
+        url = "http://dx.doi.org/" + self.doi
+        headers = {"accept": "application/json"}
+        r = requests.get(url, headers = headers)
+        self.meta = r.json()
+
+    def get_metadata(self):
+        self.doi2json()
+
+        self.title = self.meta['title']
+
+        self.author_surnames = []
+        self.author_givennames = []
+        for i in self.meta['author']:
+            self.author_surnames.append(i['family'])
+            self.author_givennames.append(i['given'])
+
+        self.journal = self.meta['container-title']
+
+        if 'published-print' in self.meta.keys():
+            self.volume = str(self.meta['volume'])
+            self.pages = str(self.meta['page'])
+            self.year = str(self.meta['published-print']['date-parts'][0][0])
+        else:
+            self.volume = ''
+            self.pages = ''
+            self.year = str(self.meta['published-online']['date-parts'][0][0])
 
     def get_citation(self):
         
@@ -52,19 +90,23 @@ class Publisher(object):
         else:
             cap = '. '
         
-        self.citation = all_authors+cap+self.year+'. '+self.title+'. ' \
-                +self.journal+' '+self.volume+': '+self.pages+'.' \
-                +' doi: '+self.doi
+        if self.volume != '':
+            self.citation = all_authors+cap+self.year+'. '+self.title+'. ' \
+                    +self.journal+' '+self.volume+': '+self.pages+'.' \
+                    +' doi: '+self.doi
+        else:
+            self.citation = all_authors+cap+self.year+'. '+self.title+'. ' \
+                    +self.journal+'. '+' doi: '+self.doi
     
     def extract_data(self):
-        self.get_title()
-        self.get_authors()
+        #self.get_title()
+        #self.get_authors()
+        self.get_doi()
+        self.get_metadata()
         self.get_abstract()
         self.get_keywords()
-        self.get_metadata()
         self.get_body()
         self.get_references()
-        self.get_citation()
 
     def epubify(self):
         """Convert data into epub format"""
@@ -75,7 +117,9 @@ class Publisher(object):
             all_authors += self.author_surnames[i]
             if(i != (len(self.author_surnames) - 1)):
                 all_authors += ', '
-        
+       
+        self.get_citation()
+
         args = []
         args.append('-M')
         args.append('title="'+self.title+'"')
