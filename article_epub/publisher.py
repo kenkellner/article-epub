@@ -72,13 +72,17 @@ class Publisher(object):
         self.journal = self.meta['container-title']
 
         if 'published-print' in self.meta.keys():
-            self.volume = str(self.meta['volume'])
-            self.pages = str(self.meta['page'])
             self.year = str(self.meta['published-print']['date-parts'][0][0])
         else:
-            self.volume = ''
-            self.pages = ''
             self.year = str(self.meta['published-online']['date-parts'][0][0])
+        try:
+            self.volume = str(self.meta['volume'])
+        except:
+            self.volume = ''
+        try:
+            self.pages = str(self.meta['page'])
+        except:
+            self.pages = ''
 
     def get_citation(self):
         

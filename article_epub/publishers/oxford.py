@@ -1,0 +1,45 @@
+from article_epub.publisher import Publisher, register_publisher
+import copy
+
+class Oxford(Publisher):
+    """Class for Oxford articles"""
+
+    domains = ["oup.com"]
+
+    def get_doi(self):
+        if self.doi == None:
+            doi_raw = self.soup.find('div',class_='ww-citation-primary') \
+                .find('a')['href'].split('/')
+            self.doi = str(doi_raw[3]+'/'+doi_raw[4])
+
+    def get_abstract(self):
+        """Get article abstract"""
+        abstract_raw = self.soup.find('section',class_='abstract')
+        self.abstract = '<h2>Abstract<h2>\n'+str(abstract_raw)
+
+    def get_keywords(self):
+        """Get article keywords"""
+        keywords_raw = self.soup.find('div',class_='kwd-group').find_all('a')
+        self.keywords = []
+        for i in keywords_raw:
+            self.keywords.append(i.text)
+
+    def get_body(self):
+        """Get body of article"""
+        body_raw = copy.copy(self.soup.find(
+            'div',{'data-widgetname':'ArticleFulltext'}))
+        body_raw.find('h2',class_='abstract-title').decompose()
+        body_raw.find('div',class_='article-metadata-panel').decompose()
+        body_raw.find('div',class_='ref-list').decompose()
+        body_raw.find('span',{'id':'UserHasAccess'}).decompose()
+        body_raw.find('div',class_='copyright').decompose()
+        body_raw.find('h2',class_='backreferences-title').decompose()
+        self.body = body_raw
+    
+    def get_references(self):
+        """Get references list"""
+        references_title = self.soup.find('h2',class_='backreferences-title')
+        references_raw = self.soup.find('div',class_='ref-list')
+        self.references = str(references_title)+str(references_raw)
+
+register_publisher(Oxford)

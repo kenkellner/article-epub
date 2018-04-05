@@ -1,6 +1,4 @@
 from article_epub.publisher import Publisher, register_publisher
-import requests
-from bs4 import BeautifulSoup
 
 class PLoSONE(Publisher):
     """Class for PLoS ONE articles"""
