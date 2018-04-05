@@ -4,7 +4,8 @@ import sys
 import requests
 
 def main():
-    if sys.argv[1] == '-d': 
+    if sys.argv[1] == '-d':
+        print("Getting URL from DOI...")
         url = requests.get('https://doi.org/'+sys.argv[2]).url
         doi = sys.argv[2]
     else:
@@ -14,9 +15,11 @@ def main():
     domain = ".".join(url.split("//")[-1].split("/")[0] \
             .split('?')[0].split('.')[-2:])
 
-    art = article_epub.publisher.get_publishers()[domain](url=url,doi=doi)
+    try:
+        art = article_epub.publisher.get_publishers()[domain](url=url,doi=doi)
+    except:
+        sys.exit('Publisher not supported.')
 
-    print('Downloading content...')
     art.soupify()
     art.extract_data()
     art.epubify()

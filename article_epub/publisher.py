@@ -25,12 +25,15 @@ class Publisher(object):
         """Get HTML from article's page"""
         self.get_final_url()
         os.environ['MOZ_HEADLESS'] = '1'
+        print('Starting headless browser...')
         binary = FirefoxBinary('/usr/bin/firefox')
         try:
             driver = webdriver.Firefox(firefox_binary=binary, 
                     log_path='/tmp/gecko_log')
         except:
             sys.exit('Failed to load Firefox; is it installed?')
+        
+        print('Loading page...')
         try:
             driver.get(self.url)
         except:
@@ -99,8 +102,7 @@ class Publisher(object):
                     +self.journal+'. '+' doi: '+self.doi
     
     def extract_data(self):
-        #self.get_title()
-        #self.get_authors()
+        print('Extracting data from HTML...')
         self.get_doi()
         self.get_metadata()
         self.get_abstract()
