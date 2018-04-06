@@ -25,25 +25,26 @@ class Publisher(object):
         """Get HTML from article's page"""
         self.get_final_url()
         os.environ['MOZ_HEADLESS'] = '1'
-        print('Starting headless browser...')
+        print('Starting headless browser...',end='',flush=True)
         binary = FirefoxBinary('/usr/bin/firefox')
         try:
             driver = webdriver.Firefox(firefox_binary=binary, 
                     log_path='/tmp/gecko_log')
+            print('done')
         except:
             sys.exit('Failed to load Firefox; is it installed?')
         
-        print('Loading page...')
+        print('Loading page................',end="",flush=True)
         try:
             driver.get(self.url)
         except:
             sys.exit('Failed to load URL')
         
         if self.doi != None:
-            print('Waiting for redirects..')
             sleep(5) #To allow redirects
-        
+
         sleep(5)
+        print('done')   
         self.url = driver.current_url
         
         self.soup = BeautifulSoup(driver.page_source,'html.parser')
@@ -106,13 +107,14 @@ class Publisher(object):
                     +self.journal+'. '+' doi: '+self.doi
     
     def extract_data(self):
-        print('Extracting data from HTML...')
+        print('Extracting data from HTML...',end='',flush=True)
         self.get_doi()
         self.get_metadata()
         self.get_abstract()
         self.get_keywords()
         self.get_body()
         self.get_references()
+        print('done')
 
     def epubify(self):
         """Convert data into epub format"""
@@ -142,12 +144,12 @@ class Publisher(object):
         combined += str(self.body)
         combined += str(self.references)
         
-        print('Generating epub...')
+        print('Generating epub.............',end='',flush=True)
         epubout = pypandoc.convert_text(combined,format='html',to='epub',
                 extra_args=args,
                 outputfile=output_raw)
-
         subprocess.check_output(['ebook-convert',output_raw,self.output])
+        print('done')
 
 def register_publisher(publisher):
     _publishers.append(publisher)

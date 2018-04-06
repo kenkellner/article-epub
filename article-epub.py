@@ -5,9 +5,10 @@ import requests
 
 def main():
     if sys.argv[1] == '-d':
-        print("Getting URL from DOI...")
+        print("Getting URL from DOI........",end='',flush=True)
         url = requests.get('https://doi.org/'+sys.argv[2]).url
         doi = sys.argv[2]
+        print('done')
     else:
         url = sys.argv[1]
         doi = None
@@ -23,6 +24,8 @@ def main():
     art.soupify()
     art.extract_data()
     art.epubify()
+    print('\nCitation: '+art.citation)
+    print('Filename: '+art.output)
 
 
 main()
