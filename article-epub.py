@@ -24,6 +24,7 @@ def main():
 
     try:
         art = article_epub.publisher.get_publishers()[domain](url=url,doi=doi)
+        print('Matched URL to publisher: '+art.__class__.__name__)
     except:
         sys.exit('Publisher not supported.')
 
