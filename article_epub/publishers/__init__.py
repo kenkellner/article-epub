@@ -5,3 +5,4 @@ from article_epub.publishers.bioone import BioOne
 from article_epub.publishers.plosone import PLoSONE
 from article_epub.publishers.oxford import Oxford
 from article_epub.publishers.nih import NIH
+from article_epub.publishers.nrc import NRC
