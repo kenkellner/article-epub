@@ -9,6 +9,12 @@ def main():
         url = requests.get('https://doi.org/'+sys.argv[2]).url
         doi = sys.argv[2]
         print('done')
+    elif sys.argv[1] == '--list-publishers':
+        pubs = article_epub.publisher.list_publishers()
+        print('Available publishers:')
+        for i in pubs:
+            print('• '+i.__name__)
+        sys.exit()
     else:
         url = sys.argv[1]
         doi = None

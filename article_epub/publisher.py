@@ -159,3 +159,6 @@ def register_publisher(publisher):
 def get_publishers():
     return _publisher_domains
 
+def list_publishers():
+    return _publishers
+
