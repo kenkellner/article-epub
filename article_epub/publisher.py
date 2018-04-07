@@ -21,6 +21,9 @@ class Publisher(object):
     def get_final_url(self):
         pass
 
+    def check_fulltext(self):
+        pass
+
     def soupify(self):
         """Get HTML from article's page"""
         self.get_final_url()
@@ -107,6 +110,7 @@ class Publisher(object):
                     +self.journal+'. '+' doi: '+self.doi
     
     def extract_data(self):
+        self.check_fulltext()
         print('Extracting data from HTML...',end='',flush=True)
         self.get_doi()
         self.get_metadata()

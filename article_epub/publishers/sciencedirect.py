@@ -1,10 +1,18 @@
 from article_epub.publisher import Publisher, register_publisher
+import sys
 
 class ScienceDirect(Publisher):
     """Class for Science Direct (Elsevier) articles"""
 
     domains = ["sciencedirect.com","elsevier.com"]
-    
+
+    def check_fulltext(self):
+        if self.soup.find('div',class_='Body') == None:
+            print('Error: Can\'t access fulltext of article')
+            sys.exit()
+        else:
+            return(True)
+
     def get_doi(self):
         if self.doi == None:
             doi_raw = self.soup.find('a',class_='doi').get('href').split('/')
