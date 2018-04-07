@@ -6,6 +6,13 @@ class Oxford(Publisher):
 
     domains = ["oup.com"]
 
+    def check_fulltext(self):
+        if self.soup.find('div',{'data-widgetname':'ArticleFulltext'}) == None:
+            print('Error: Can\'t access fulltext of article')
+            sys.exit()
+        else:
+            return(True)
+    
     def get_doi(self):
         if self.doi == None:
             doi_raw = self.soup.find('div',class_='ww-citation-primary') \

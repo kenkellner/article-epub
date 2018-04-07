@@ -6,6 +6,13 @@ class BioOne(Publisher):
     """Class for BioOne articles"""
 
     domains = ["bioone.org"]
+    
+    def check_fulltext(self):
+        if self.soup.find('div',class_='hlFld-Fulltext') == None:
+            print('Error: Can\'t access fulltext of article')
+            sys.exit()
+        else:
+            return(True)
 
     def get_final_url(self):
         if '/abs/' in self.url:

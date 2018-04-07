@@ -9,6 +9,13 @@ class Wiley(Publisher):
         if '/abs/' in self.url:
             self.url = self.url.replace('/abs/','/full/')
    
+    def check_fulltext(self):
+        if self.soup.find('div',class_='article-section__content') == None:
+            print('Error: Can\'t access fulltext of article')
+            sys.exit()
+        else:
+            return(True)
+    
     def get_doi(self):
         if self.doi == None:
             doi_raw = self.soup.find('a',class_='epub-doi').text.split('/')
