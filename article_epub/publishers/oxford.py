@@ -1,5 +1,6 @@
 from article_epub.publisher import Publisher, register_publisher
 import copy
+import sys
 
 class Oxford(Publisher):
     """Class for Oxford articles"""

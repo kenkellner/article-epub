@@ -1,4 +1,5 @@
 from article_epub.publisher import Publisher, register_publisher
+import sys
 
 class Springer(Publisher):
     """Class for Springer articles"""

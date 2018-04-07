@@ -1,6 +1,7 @@
 from article_epub.publisher import Publisher, register_publisher
 import requests
 from bs4 import BeautifulSoup
+import sys
 
 class BioOne(Publisher):
     """Class for BioOne articles"""
