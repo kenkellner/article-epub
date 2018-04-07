@@ -9,8 +9,7 @@ class NRC(Publisher):
     
     def check_fulltext(self):
         if self.soup.find('div',class_='NLM_sec_level_1') == None:
-            print('Error: Can\'t access fulltext of article')
-            sys.exit()
+            sys.exit('Error: Can\'t access fulltext of article')
         else:
             return(True)
     

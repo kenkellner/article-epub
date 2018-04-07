@@ -13,8 +13,7 @@ class Wiley(Publisher):
     def check_fulltext(self):
         test = self.soup.find_all('div',class_='article-section__content')
         if len(test) < 3:
-            print('Error: Can\'t access fulltext of article')
-            sys.exit()
+            sys.exit('Error: Can\'t access fulltext of article')
         else:
             return(True)
     

@@ -9,8 +9,7 @@ class Oxford(Publisher):
 
     def check_fulltext(self):
         if self.soup.find('div',{'data-widgetname':'ArticleFulltext'}) == None:
-            print('Error: Can\'t access fulltext of article')
-            sys.exit()
+            sys.exit('Error: Can\'t access fulltext of article')
         else:
             return(True)
     
