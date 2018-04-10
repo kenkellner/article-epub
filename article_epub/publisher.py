@@ -120,7 +120,7 @@ class Publisher(object):
         self.get_references()
         print('done')
 
-    def epubify(self):
+    def epubify(self,output=None):
         """Convert data into epub format"""
 
         all_authors = ''
@@ -138,8 +138,12 @@ class Publisher(object):
         args.append('-M')
         args.append('author="'+all_authors+'"')
         args.append('--parse-raw')
-
-        self.output = self.author_surnames[0]+'_'+self.year+'.epub'
+        
+        if output == None:
+            self.output = self.author_surnames[0]+'_'+self.year+'.epub'
+        else:
+            self.output = output
+        
         output_raw = '/tmp/raw.epub'
 
         combined = ''
