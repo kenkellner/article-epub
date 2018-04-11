@@ -46,7 +46,7 @@ class BioOne(Publisher):
             except:
                 pass
         
-        print('Downloading higher-quality images...')
+        #print('Downloading higher-quality images...')
         imgs_old = body_full.find_all('div',class_='articleImage')
         for i in imgs_old:
             try:

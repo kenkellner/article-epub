@@ -23,11 +23,15 @@ class ScienceDirect(Publisher):
 
     def get_keywords(self):
         """Get article keywords"""
-        keys_raw = self.soup.find('div',class_='Keywords') \
-            .find_all('div',class_='keyword')
         self.keywords = []
-        for i in keys_raw:
-            self.keywords.append(i.text)
+        try:
+            keys_raw = self.soup.find('div',class_='Keywords') \
+                .find_all('div',class_='keyword')
+            self.keywords = []
+            for i in keys_raw:
+                self.keywords.append(i.text)
+        except:
+            pass
 
     def get_body(self):
         """Get body of article"""

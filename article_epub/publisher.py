@@ -88,7 +88,7 @@ class Publisher(object):
         except:
             self.pages = ''
 
-    def get_citation(self):
+    def get_citation(self,link=False):
         
         all_authors = ''
         for i in range(0,len(self.author_surnames)):
@@ -101,13 +101,18 @@ class Publisher(object):
         else:
             cap = '. '
         
-        if self.volume != '':
-            self.citation = all_authors+cap+self.year+'. '+self.title+'. ' \
-                    +self.journal+' '+self.volume+': '+self.pages+'.' \
-                    +' doi: '+self.doi
+        if link:
+            doi = '<a href="https://dx.doi.org/'+self.doi+'">'+self.doi+'</a>'
         else:
-            self.citation = all_authors+cap+self.year+'. '+self.title+'. ' \
-                    +self.journal+'. '+' doi: '+self.doi
+            doi = self.doi
+
+        if self.volume != '':
+            return(all_authors+cap+self.year+'. '+self.title+'. ' \
+                    +self.journal+' '+self.volume+': '+self.pages+'.' \
+                    +' doi: '+doi) 
+        else:
+            return(all_authors+cap+self.year+'. '+self.title+'. ' \
+                    +self.journal+'. '+' doi: '+doi)
     
     def extract_data(self):
         self.check_fulltext()
@@ -138,6 +143,7 @@ class Publisher(object):
         args.append('-M')
         args.append('author="'+all_authors+'"')
         args.append('--parse-raw')
+        args.append('--webtex')
         
         if output == None:
             self.output = self.author_surnames[0]+'_'+self.year+'.epub'
@@ -147,7 +153,7 @@ class Publisher(object):
         output_raw = '/tmp/raw.epub'
 
         combined = ''
-        combined += str(self.citation)
+        combined += str(self.get_citation(link=True))
         combined += str(self.abstract)
         combined += str(self.body)
         combined += str(self.references)
@@ -156,7 +162,8 @@ class Publisher(object):
         epubout = pypandoc.convert_text(combined,format='html',to='epub',
                 extra_args=args,
                 outputfile=output_raw)
-        subprocess.check_output(['ebook-convert',output_raw,self.output])
+        subprocess.check_output(['ebook-convert',output_raw,self.output,
+            '--no-default-epub-cover'])
         print('done')
 
 def register_publisher(publisher):

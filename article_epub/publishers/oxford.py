@@ -26,10 +26,14 @@ class Oxford(Publisher):
 
     def get_keywords(self):
         """Get article keywords"""
-        keywords_raw = self.soup.find('div',class_='kwd-group').find_all('a')
         self.keywords = []
-        for i in keywords_raw:
-            self.keywords.append(i.text)
+        try:
+            keywords_raw = self.soup.find('div',class_='kwd-group') \
+                .find_all('a')
+            for i in keywords_raw:
+                self.keywords.append(i.text)
+        except:
+            pass
 
     def get_body(self):
         """Get body of article"""
