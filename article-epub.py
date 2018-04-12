@@ -70,7 +70,8 @@ def url_from_title(title):
             .find('div',class_='gs_ri').find('a')
         possible_title = result.text
         possible_link = result['href']
-
+        print('Provided title:')
+        print(title)
         print('Found following article:')
         print(possible_title)
         choice = input("Is this correct (y/n)? ")
