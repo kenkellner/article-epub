@@ -62,6 +62,10 @@ class NRC(Publisher):
         else:
             print('Unable to get table images')
         
+        for i in body_raw.find_all('alternatives'):
+            link = 'http://nrcresearchpress.com'+i.find('img')['src']
+            i.find('img')['src'] = link
+        
         for i in body_raw.find_all('a',class_='openLayerForItem'):
             i['href'] = '#'+i['itemid']
     

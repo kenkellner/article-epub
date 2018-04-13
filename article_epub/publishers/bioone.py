@@ -58,7 +58,12 @@ class BioOne(Publisher):
                 link['href'] = ''
             except:
                 pass
-
+        
+        formulas = body_full.find_all('table',class_='formula')
+        for i in formulas:
+            link = 'http://bioone.org'+str(i.find('img')['src'])
+            i.find('img')['src'] = link
+        
         body_raw = body_full.find_all('div',class_='NLM_sec_level_1')
         self.body = ''
         for i in body_raw:
