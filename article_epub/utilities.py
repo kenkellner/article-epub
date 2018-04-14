@@ -26,3 +26,9 @@ def url_from_title(title):
     except:
         sys.exit('Getting URL from title failed')
 
+def url_from_doi(doi):
+    print("Getting URL from DOI........",end='',flush=True)
+    url = requests.get('https://doi.org/'+doi,
+            headers={'User-Agent':'Mozilla/5.0'}).url
+    print('done')
+    return(url)

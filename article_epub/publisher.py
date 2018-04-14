@@ -177,3 +177,13 @@ def get_publishers():
 def list_publishers():
     return _publishers
 
+def match_publisher(url,doi):
+    domain = ".".join(url.split("//")[-1].split("/")[0] \
+            .split('?')[0].split('.')[-2:])
+    try:
+        art = get_publishers()[domain](url=url,doi=doi)
+        print('Matched URL to publisher: '+art.__class__.__name__)
+        return(art)
+    except:
+        sys.exit('Publisher not supported.')
+
