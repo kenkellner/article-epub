@@ -13,7 +13,8 @@ _publishers = list()
 _publisher_domains = dict()
 
 class Publisher(object):
-    
+    """General class for scientific article publishers"""
+
     def __init__(self, url, doi=None, out_format='epub'):
         self.url = url
         self.doi = doi
@@ -54,15 +55,14 @@ class Publisher(object):
         driver.quit()
 
     def doi2json(self):
-        """
-        Get a dictionary of metadata for a given DOI.
-        """
+        """Get a dictionary of metadata for a given DOI."""
         url = "http://dx.doi.org/" + self.doi
         headers = {"accept": "application/json"}
         r = requests.get(url, headers = headers)
         self.meta = r.json()
 
     def get_metadata(self):
+        """Extract metadata from DOI"""
         self.doi2json()
 
         self.title = self.meta['title']
@@ -89,7 +89,7 @@ class Publisher(object):
             self.pages = ''
 
     def get_citation(self,link=False):
-        
+        """Generate a formatted citation from metadata"""
         all_authors = ''
         for i in range(0,len(self.author_surnames)):
             all_authors += self.author_surnames[i] + ', '
@@ -178,6 +178,7 @@ def list_publishers():
     return _publishers
 
 def match_publisher(url,doi):
+    """Match a URL to a publisher class"""
     domain = ".".join(url.split("//")[-1].split("/")[0] \
             .split('?')[0].split('.')[-2:])
     try:
