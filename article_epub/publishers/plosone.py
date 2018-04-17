@@ -37,8 +37,13 @@ class PLoSONE(Publisher):
 
         for p in body_raw.find_all('p',class_='caption_object'):
             p.decompose()
-        
-        body_raw.find('div',class_='figshare_widget').decompose()
+        try:
+            body_raw.find('div',class_='figshare_widget').decompose()
+        except:
+            pass
+        for i in body_raw.find_all('img',class_='inline-graphic'):
+            link = 'http://journals.plos.org/plosone/'+i['src']
+            i['src'] = link
 
         body_parts = body_raw.find_all('div',class_='section toc-section',
             recursive=False)

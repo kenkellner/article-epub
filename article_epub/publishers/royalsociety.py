@@ -56,13 +56,16 @@ class RoyalSociety(Publisher):
 
         tables = self.soup.find_all('div',class_='table')
         for i in tables:
-            src = 'http://rstb.royalsocietypublishing.org'+ \
-            i.find('a')['data-table-url']
-            dat = requests.get(src, headers={'User-Agent':'Mozilla/5.0'})
-            tabsoup = BeautifulSoup(dat.content,'html.parser') \
-                .find('table')
-            i.append(tabsoup)
-            i.find('div',class_='table-callout-links').decompose()
+            try:
+                src = 'http://rstb.royalsocietypublishing.org'+ \
+                i.find('a')['data-table-url']
+                dat = requests.get(src, headers={'User-Agent':'Mozilla/5.0'})
+                tabsoup = BeautifulSoup(dat.content,'html.parser') \
+                    .find('table')
+                i.append(tabsoup)
+                i.find('div',class_='table-callout-links').decompose()
+            except:
+                pass
 
         self.body = ''
         for i in body_raw:
