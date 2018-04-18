@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 class RoyalSociety(Publisher):
     """Class for Royal Society Publishing articles"""
 
+    name = "Royal Society Publishing"
     domains = ["royalsocietypublishing.org"]
 
     def check_fulltext(self):

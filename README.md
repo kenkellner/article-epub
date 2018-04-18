@@ -23,6 +23,7 @@ Currently, the following publishers are supported:
 * PLoS ONE
 * National Institutes of Health (NIH)
 * NRC Research Press
+* Taylor & Francis
 
 Dependencies
 ------------

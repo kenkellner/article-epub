@@ -22,7 +22,7 @@ def main():
         pubs = article_epub.list_publishers()
         print('Available publishers:')
         for i in pubs:
-            print('• '+i.__name__)
+            print('• '+i)
         sys.exit()
     
     if args.u != None:

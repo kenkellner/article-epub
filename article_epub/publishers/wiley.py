@@ -4,6 +4,7 @@ import sys
 class Wiley(Publisher):
     """Class for Springer articles"""
 
+    name = "Wiley"
     domains = ["wiley.com"]
 
     def get_final_url(self):
@@ -11,8 +12,7 @@ class Wiley(Publisher):
             self.url = self.url.replace('/abs/','/full/')
    
     def check_fulltext(self):
-        test = self.soup.find_all('div',class_='article-section__content')
-        if len(test) < 4:
+        if self.soup.find('section',class_='article-section__full') == None:
             sys.exit('Error: Can\'t access fulltext of article')
         else:
             return(True)

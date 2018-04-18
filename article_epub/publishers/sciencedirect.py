@@ -4,6 +4,7 @@ import sys
 class ScienceDirect(Publisher):
     """Class for Science Direct (Elsevier) articles"""
 
+    name = "Elsevier"
     domains = ["sciencedirect.com","elsevier.com"]
 
     def check_fulltext(self):

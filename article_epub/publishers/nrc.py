@@ -5,6 +5,7 @@ import sys
 class NRC(Publisher):
     """Class for NRC Research Press articles"""
 
+    name = "NRC Research Press"
     domains = ["nrcresearchpress.com"]
     
     def check_fulltext(self):

@@ -5,6 +5,7 @@ import sys
 class Oxford(Publisher):
     """Class for Oxford articles"""
 
+    name = "Oxford Academic"
     domains = ["oup.com"]
 
     def check_fulltext(self):
@@ -39,7 +40,10 @@ class Oxford(Publisher):
         """Get body of article"""
         body_raw = copy.copy(self.soup.find(
             'div',{'data-widgetname':'ArticleFulltext'}))
-        body_raw.find('h2',class_='abstract-title').decompose()
+        try:
+            body_raw.find('h2',class_='abstract-title').decompose()
+        except:
+            pass
         body_raw.find('section',class_='abstract').decompose()
         body_raw.find('div',class_='article-metadata-panel').decompose()
         body_raw.find('div',class_='ref-list').decompose()

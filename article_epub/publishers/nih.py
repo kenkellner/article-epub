@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 class NIH(Publisher):
     """Class for NIH NCBI articles"""
 
+    name = "NIH-NCBI"
     domains = ["nih.gov"]
 
     def soupify(self):

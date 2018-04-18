@@ -4,6 +4,7 @@ import sys
 class TandF(Publisher):
     """Class for Taylor & Francis articles"""
 
+    name = "Taylor & Francis"
     domains = ["tandfonline.com"]
 
     def get_final_url(self):
@@ -24,7 +25,15 @@ class TandF(Publisher):
     def get_abstract(self):
         """Get article abstract"""
         abstract_raw = self.soup.find('div',class_='hlFld-Abstract')
-        abstract_raw.find('p',class_='summary-title').decompose()
+        try:
+            abstract_raw.find('p',class_='summary-title').decompose()
+        except:
+            pass
+        try:
+            abstract_raw.find('div',{'id':'mathJaxToggle'}).decompose()
+        except:
+            pass
+        
         self.abstract = str(abstract_raw)
 
     def get_keywords(self):
@@ -71,6 +80,9 @@ class TandF(Publisher):
             link = 'https://www.tandfonline.com'+csv['href']
             csv['href'] = link
             i.find('a',{'id':'displaySizeTable'}).decompose()
+        
+        for i in self.soup.find_all('span',class_='NLM_disp-formula-image'):
+            i.decompose()
 
         self.body = ''
         for i in body_raw:
@@ -80,6 +92,9 @@ class TandF(Publisher):
         """Get references list"""
         references_raw = self.soup.find('ul',{'id':'references-Section'})
         for i in references_raw.find_all('div',class_='xlinks-container'):
+            i.decompose()
+
+        for i in references_raw.find_all('img'):
             i.decompose()
         
         references_title = '<h2>References</h2>\n'

@@ -3,6 +3,7 @@ from article_epub.publisher import Publisher, register_publisher
 class PLoSONE(Publisher):
     """Class for PLoS ONE articles"""
 
+    name = "PLoS ONE"
     domains = ["plos.org"]
 
     def get_doi(self):

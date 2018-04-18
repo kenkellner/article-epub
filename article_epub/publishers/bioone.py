@@ -5,7 +5,8 @@ import sys
 
 class BioOne(Publisher):
     """Class for BioOne articles"""
-
+    
+    name = "BioOne"
     domains = ["bioone.org"]
     
     def check_fulltext(self):

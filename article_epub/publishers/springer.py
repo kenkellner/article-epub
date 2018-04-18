@@ -4,6 +4,7 @@ import sys
 class Springer(Publisher):
     """Class for Springer articles"""
 
+    name = "Springer"
     domains = ["springer.com"]
 
     def check_fulltext(self):

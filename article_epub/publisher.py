@@ -11,6 +11,7 @@ import json
 
 _publishers = list()
 _publisher_domains = dict()
+_publisher_names = list()
 
 class Publisher(object):
     """General class for scientific article publishers"""
@@ -168,6 +169,7 @@ class Publisher(object):
 
 def register_publisher(publisher):
     _publishers.append(publisher)
+    _publisher_names.append(publisher.name)
     for d in publisher.domains:
         _publisher_domains[d] = publisher
 
@@ -175,7 +177,7 @@ def get_publishers():
     return _publisher_domains
 
 def list_publishers():
-    return _publishers
+    return _publisher_names
 
 def match_publisher(url,doi):
     """Match a URL to a publisher class"""
@@ -183,7 +185,7 @@ def match_publisher(url,doi):
             .split('?')[0].split('.')[-2:])
     try:
         art = get_publishers()[domain](url=url,doi=doi)
-        print('Matched URL to publisher: '+art.__class__.__name__)
+        print('Matched URL to publisher: '+art.name)
         return(art)
     except:
         sys.exit('Publisher not supported.')
