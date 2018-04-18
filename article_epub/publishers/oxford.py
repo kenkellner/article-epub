@@ -45,7 +45,10 @@ class Oxford(Publisher):
         except:
             pass
         body_raw.find('section',class_='abstract').decompose()
-        body_raw.find('div',class_='article-metadata-panel').decompose()
+        try:
+            body_raw.find('div',class_='article-metadata-panel').decompose()
+        except:
+            pass
         body_raw.find('div',class_='ref-list').decompose()
         body_raw.find('span',{'id':'UserHasAccess'}).decompose()
         body_raw.find('div',class_='copyright').decompose()
