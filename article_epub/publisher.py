@@ -183,10 +183,13 @@ def match_publisher(url,doi):
     """Match a URL to a publisher class"""
     domain = ".".join(url.split("//")[-1].split("/")[0] \
             .split('?')[0].split('.')[-2:])
+    if domain == 'doi.org':
+        sys.exit('DOI not found; is it correct?')
+
     try:
         art = get_publishers()[domain](url=url,doi=doi)
         print('Matched URL to publisher: '+art.name)
         return(art)
     except:
-        sys.exit('Publisher not supported.')
+        sys.exit('Publisher ['+domain+'] not supported.')
 

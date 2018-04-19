@@ -10,7 +10,7 @@ class BioOne(Publisher):
     domains = ["bioone.org"]
     
     def check_fulltext(self):
-        if self.soup.find('div',class_='hlFld-Fulltext') == None:
+        if self.soup.find('div',class_='NLM_sec_level_1') == None:
             sys.exit('Error: Can\'t access fulltext of article')
         else:
             return(True)

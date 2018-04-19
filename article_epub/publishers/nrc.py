@@ -27,10 +27,13 @@ class NRC(Publisher):
 
     def get_keywords(self):
         """Get article keywords"""
-        keywords_raw = self.soup.find('font',{'size':'-1'}).find_all('a')
         self.keywords = []
-        for i in keywords_raw:
-            self.keywords.append(i.text)
+        try:
+            keywords_raw = self.soup.find('font',{'size':'-1'}).find_all('a')
+            for i in keywords_raw:
+                self.keywords.append(i.text)
+        except:
+            pass
 
     def get_body(self):
         """Get body of article"""
@@ -46,8 +49,8 @@ class NRC(Publisher):
             i.find('p').decompose()
         
         if len(figs) > 0:
-            temp_raw = 'http://nrcresearchpress.com'+newlink
-            template = temp_raw.split('f')[0:-2][0]
+            newlink = figs[0].find('img')['src']
+            template = newlink.split('f1')[0]
             for i in body_raw.find_all('div',class_='short-legend'):
                 i.decompose()
             

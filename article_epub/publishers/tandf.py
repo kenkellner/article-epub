@@ -80,9 +80,23 @@ class TandF(Publisher):
             link = 'https://www.tandfonline.com'+csv['href']
             csv['href'] = link
             i.find('a',{'id':'displaySizeTable'}).decompose()
-        
-        for i in self.soup.find_all('span',class_='NLM_disp-formula-image'):
-            i.decompose()
+       
+        for i in self.soup.find_all('span', class_='disp-formula'):
+            
+            link = 'https://www.tandfonline.com'+ \
+                    i.find('noscript').find('img')['src']
+
+            for j in i.find_all('noscript'):
+                j.decompose()
+
+            i.find('img')['src'] = link
+
+        for i in self.soup.find_all('span', class_='NLM_inline-graphic'):
+            for j in i.find_all('noscript'):
+                j.decompose()
+            
+            link = 'https://www.tandfonline.com'+i.find('img')['src']
+            i.find('img')['src'] = link
 
         self.body = ''
         for i in body_raw:

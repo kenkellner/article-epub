@@ -23,6 +23,10 @@ class Oxford(Publisher):
     def get_abstract(self):
         """Get article abstract"""
         abstract_raw = self.soup.find('section',class_='abstract')
+        if abstract_raw == None:
+            self.abstract = ''
+            return
+
         self.abstract = '<h2>Abstract</h2>\n'+str(abstract_raw)
 
     def get_keywords(self):
@@ -44,15 +48,24 @@ class Oxford(Publisher):
             body_raw.find('h2',class_='abstract-title').decompose()
         except:
             pass
-        body_raw.find('section',class_='abstract').decompose()
+        try:
+            body_raw.find('section',class_='abstract').decompose()
+        except:
+            pass
         try:
             body_raw.find('div',class_='article-metadata-panel').decompose()
         except:
             pass
-        body_raw.find('div',class_='ref-list').decompose()
+        try:
+            body_raw.find('div',class_='ref-list').decompose()
+            body_raw.find('h2',class_='backreferences-title').decompose()
+        except:
+            pass
         body_raw.find('span',{'id':'UserHasAccess'}).decompose()
-        body_raw.find('div',class_='copyright').decompose()
-        body_raw.find('h2',class_='backreferences-title').decompose()
+        try:
+            body_raw.find('div',class_='copyright').decompose()
+        except:
+            pass
 
         for i in body_raw.find_all('div',class_='fig-modal'):
             i.decompose()
@@ -78,8 +91,12 @@ class Oxford(Publisher):
     
     def get_references(self):
         """Get references list"""
-        references_title = self.soup.find('h2',class_='backreferences-title')
         references_raw = self.soup.find('div',class_='ref-list')
+        if references_raw == None:
+            self.references = ''
+            return
+        
+        references_title = self.soup.find('h2',class_='backreferences-title')
         refs_format = ''
         for i in references_raw.find_all('div',recursive=False):
             for j in i.find_all('a'):
