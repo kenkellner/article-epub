@@ -14,11 +14,16 @@ def url_from_title(title):
             .find('div',class_='gs_ri').find('a')
         possible_title = result.text
         possible_link = result['href']
+        
+        if possible_title == '':
+            print('No matching link available.')
+            sys.exit('Getting URL from title failed')
+        
         print('Provided title:')
         print(title)
         print('Found following article:')
         print(possible_title)
-        choice = input("Is this correct (y/n)? ")
+        choice = input("\033[0;37m"+"Is this correct (y/n)? "+"\033[00m")
         if choice == 'y':
             return(possible_link)
         else:
