@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import sys
+from urllib.parse import unquote
 
 def url_from_title(title):
     print("Getting URL from title......")
@@ -33,7 +34,16 @@ def url_from_title(title):
 
 def url_from_doi(doi):
     print("Getting URL from DOI........",end='',flush=True)
-    url = requests.get('https://doi.org/'+doi,
-            headers={'User-Agent':'Mozilla/5.0'}).url
+    r = requests.get('https://doi.org/'+doi,
+            headers={'User-Agent':'Mozilla/5.0'})
+
+    #To handle Elsevier linkinghub redirects
+    soup = BeautifulSoup(r.content,'html.parser')
+    if soup.find('input',{'id':'redirectURL'}) is not None:
+        url_raw = soup.find('input',{'id':'redirectURL'})['value']
+        url = unquote(url_raw.split('_returnURL')[0])
+    else:
+        url = r.url
+
     print('done')
     return(url)
