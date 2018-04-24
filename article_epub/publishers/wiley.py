@@ -13,15 +13,18 @@ class Wiley(Publisher):
    
     def check_fulltext(self):
         full = self.soup.find('section',class_='article-section__full')
-        if full != None:
-            if full.find('div',class_='article-section__content') \
-                .text == '\n\xa0\n':
-                sys.exit('Error: Can\'t access fulltext of article')
+        try:
+            if full != None:
+                if full.find('div',class_='article-section__content') \
+                    .text == '\n\xa0\n':
+                    sys.exit('Error: Can\'t access fulltext of article')
+                else:
+                    return(True)
             else:
-                return(True)
-        else:
+                sys.exit('Error: Can\'t access fulltext of article')
+        except:
             sys.exit('Error: Can\'t access fulltext of article')
-    
+ 
     def get_doi(self):
         if self.doi == None:
             doi_raw = self.soup.find('a',class_='epub-doi').text.split('/')

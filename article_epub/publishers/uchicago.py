@@ -67,6 +67,11 @@ class UChicago(Publisher):
             link = 'https://www.journals.uchicago.edu'+img['src']
             img['src'] = link
 
+        for i in body_raw.find_all('span',class_='formula-display'):
+            img = i.find('img')
+            link = 'https://www.journals.uchicago.edu'+img['src']
+            img['src'] = link
+
         self.body = str(body_raw)
 
     def get_references(self):
