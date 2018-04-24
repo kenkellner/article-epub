@@ -10,3 +10,4 @@ from article_epub.publishers.royalsociety import RoyalSociety
 from article_epub.publishers.tandf import TandF
 from article_epub.publishers.annualreviews import AnnualReviews
 from article_epub.publishers.nature import Nature
+from article_epub.publishers.uchicago import UChicago
