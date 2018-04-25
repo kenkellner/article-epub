@@ -11,6 +11,11 @@ class Oxford(Publisher):
     def check_fulltext(self):
         if self.soup.find('div',{'data-widgetname':'ArticleFulltext'}) == None:
             sys.exit('Error: Can\'t access fulltext of article')
+        elif self.soup.find('span',{'id':'UserHasAccess'}) \
+                ['data-userhasaccess'] == 'False':        
+            sys.exit('Error: Can\'t access fulltext of article')
+        elif self.soup.find('div',class_='PdfOnlyLink') != None:
+            sys.exit('Error: Can\'t access fulltext of article')
         else:
             return(True)
     

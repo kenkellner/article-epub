@@ -29,7 +29,7 @@ class NIH(Publisher):
         self.get_citation()
         print('done')
 
-    def epubify(self):
+    def epubify(self,output=None):
 
         all_authors = ''
         for i in range(0,len(self.author_surnames)):
@@ -38,7 +38,11 @@ class NIH(Publisher):
             if(i != (len(self.author_surnames) - 1)):
                 all_authors += ', '
 
-        self.output = self.author_surnames[0]+'_'+self.year+'.epub'
+        if output == None:
+            self.output = self.author_surnames[0]+'_'+self.year+'.epub'
+        else:
+            self.output = output
+         
         output_raw = '/tmp/raw.epub'
         
         pdf_link = self.soup.find('div',class_='format-menu') \
