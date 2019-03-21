@@ -143,7 +143,7 @@ class Publisher(object):
         args.append('title="'+self.title+'"')
         args.append('-M')
         args.append('author="'+all_authors+'"')
-        args.append('--parse-raw')
+        #args.append('--parse-raw')
         args.append('--webtex')
         
         if output == None:
@@ -160,7 +160,7 @@ class Publisher(object):
         combined += str(self.references)
         
         print('Generating epub.............',end='',flush=True)
-        epubout = pypandoc.convert_text(combined,format='html',to='epub',
+        epubout = pypandoc.convert_text(combined,format='html',to='epub+raw_html',
                 extra_args=args,
                 outputfile=output_raw)
         subprocess.check_output(['ebook-convert',output_raw,self.output,
