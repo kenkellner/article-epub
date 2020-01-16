@@ -8,6 +8,7 @@ from time import sleep
 import subprocess
 import requests
 import json
+import tempfile
 
 _publishers = list()
 _publisher_domains = dict()
@@ -31,10 +32,17 @@ class Publisher(object):
         self.get_final_url()
         os.environ['MOZ_HEADLESS'] = '1'
         print('Starting headless browser...',end='',flush=True)
-        binary = FirefoxBinary('/usr/bin/firefox')
+        
+        if(os.name == "posix"):
+            binary = FirefoxBinary('/usr/bin/firefox')
+        elif(os.name == "nt"):
+            binary = FirefoxBinary('C:/Program Files/Mozilla Firefox/firefox.exe')
+        else:
+            sys.exit("Error: Unknown OS")
+            
         try:
             driver = webdriver.Firefox(firefox_binary=binary, 
-                    log_path='/tmp/gecko_log')
+                    log_path=os.path.join(tempfile.gettempdir(), 'gecko_log'))
             print('done')
         except:
             sys.exit('Failed to load Firefox; is it installed?')
@@ -151,7 +159,7 @@ class Publisher(object):
         else:
             self.output = output
         
-        output_raw = '/tmp/raw.epub'
+        output_raw = os.path.join(tempfile.gettempdir(), 'raw.epub')
 
         combined = ''
         combined += str(self.get_citation(link=True))
