@@ -12,13 +12,13 @@ class Oxford(Publisher):
         if self.soup.find('div',{'data-widgetname':'ArticleFulltext'}) == None:
             sys.exit('Error: Can\'t access fulltext of article')
         elif self.soup.find('span',{'id':'UserHasAccess'}) \
-                ['data-userhasaccess'] == 'False':        
+                ['data-userhasaccess'] == 'False':
             sys.exit('Error: Can\'t access fulltext of article')
         elif self.soup.find('div',class_='PdfOnlyLink') != None:
             sys.exit('Error: Can\'t access fulltext of article')
         else:
             return(True)
-    
+
     def get_doi(self):
         if self.doi == None:
             doi_raw = self.soup.find('div',class_='ww-citation-primary') \
@@ -77,7 +77,7 @@ class Oxford(Publisher):
 
         for i in body_raw.find_all('div',class_='table-modal'):
             i.decompose()
-        
+
         for i in body_raw.find_all('div',class_='fig-orig'):
             i.decompose()
 
@@ -87,20 +87,23 @@ class Oxford(Publisher):
         for i in body_raw.find_all('a',class_='xref-bibr'):
             new = '#'+i['reveal-id']
             i['href'] = new
-        
+
         for i in body_raw.find_all('a',class_='xref-fig'):
-            new = '#'+i['reveal-id']
+            # print(i.__dict__)
+            # new = '#'+i['reveal-id']
+            new = '#'+i['data-modal-source-id']
+
             i['href'] = new
-        
+
         self.body = body_raw
-    
+
     def get_references(self):
         """Get references list"""
         references_raw = self.soup.find('div',class_='ref-list')
         if references_raw == None:
             self.references = ''
             return
-        
+
         references_title = self.soup.find('h2',class_='backreferences-title')
         refs_format = ''
         for i in references_raw.find_all('div',recursive=False):

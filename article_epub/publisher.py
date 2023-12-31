@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from bs4 import BeautifulSoup
-import os 
+import os
 import sys
 import pypandoc
 from time import sleep
@@ -32,34 +32,36 @@ class Publisher(object):
         self.get_final_url()
         os.environ['MOZ_HEADLESS'] = '1'
         print('Starting headless browser...',end='',flush=True)
-        
+
         if(os.name == "posix"):
-            binary = FirefoxBinary('/usr/bin/firefox')
+            binary = FirefoxBinary('firefox')
         elif(os.name == "nt"):
             binary = FirefoxBinary('C:/Program Files/Mozilla Firefox/firefox.exe')
         else:
             sys.exit("Error: Unknown OS")
-            
+
         try:
-            driver = webdriver.Firefox(firefox_binary=binary, 
-                    log_path=os.path.join(tempfile.gettempdir(), 'gecko_log'))
+            driver_options = webdriver.FirefoxOptions()
+            driver_options.binary = binary
+            driver = webdriver.Firefox(options=driver_options)
             print('done')
-        except:
+        except Exception as e:
+            print(e)
             sys.exit('Failed to load Firefox; is it installed?')
-        
+
         print('Loading page................',end="",flush=True)
         try:
             driver.get(self.url)
         except:
             sys.exit('Failed to load URL')
-        
+
         if self.doi != None:
             sleep(5) #To allow redirects
 
         sleep(5)
-        print('done')   
+        print('done')
         self.url = driver.current_url
-        
+
         self.soup = BeautifulSoup(driver.page_source,'html.parser')
         driver.quit()
 
@@ -109,7 +111,7 @@ class Publisher(object):
             cap = ' '
         else:
             cap = '. '
-        
+
         if link:
             doi = '<a href="https://dx.doi.org/'+self.doi+'">'+self.doi+'</a>'
         else:
@@ -118,11 +120,11 @@ class Publisher(object):
         if self.volume != '':
             return(all_authors+cap+self.year+'. '+self.title+'. ' \
                     +self.journal+' '+self.volume+': '+self.pages+'.' \
-                    +' doi: '+doi) 
+                    +' doi: '+doi)
         else:
             return(all_authors+cap+self.year+'. '+self.title+'. ' \
                     +self.journal+'. '+' doi: '+doi)
-    
+
     def extract_data(self):
         self.check_fulltext()
         print('Extracting data from HTML...',end='',flush=True)
@@ -143,7 +145,7 @@ class Publisher(object):
             all_authors += self.author_surnames[i]
             if(i != (len(self.author_surnames) - 1)):
                 all_authors += ', '
-       
+
         self.get_citation()
 
         args = []
@@ -153,12 +155,12 @@ class Publisher(object):
         args.append('author="'+all_authors+'"')
         #args.append('--parse-raw')
         args.append('--webtex')
-        
+
         if output == None:
             self.output = self.author_surnames[0]+'_'+self.year+'.epub'
         else:
             self.output = output
-        
+
         output_raw = os.path.join(tempfile.gettempdir(), 'raw.epub')
 
         combined = ''
@@ -166,7 +168,7 @@ class Publisher(object):
         combined += str(self.abstract)
         combined += str(self.body)
         combined += str(self.references)
-        
+
         print('Generating epub.............',end='',flush=True)
         epubout = pypandoc.convert_text(combined,format='html',to='epub+raw_html',
                 extra_args=args,
