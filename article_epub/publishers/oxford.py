@@ -89,10 +89,7 @@ class Oxford(Publisher):
             i['href'] = new
 
         for i in body_raw.find_all('a',class_='xref-fig'):
-            # print(i.__dict__)
-            # new = '#'+i['reveal-id']
             new = '#'+i['data-modal-source-id']
-
             i['href'] = new
 
         self.body = body_raw
